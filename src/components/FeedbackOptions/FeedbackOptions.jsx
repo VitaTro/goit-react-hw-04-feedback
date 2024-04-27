@@ -17,11 +17,11 @@ import css from './FeedbackOptions.module.css';
 // cтворення притисків
 const FeedbackOptions = props => {
   const { options, onLeaveFeedback } = props;
-  const feedbackOptionsKeys = Object.keys(options);
+  // const feedbackOptionsKeys = Object.keys(options);
 
   return (
     <ul className={css.container}>
-      {feedbackOptionsKeys.map((option, index) => {
+      {options.map((option, index) => {
         return (
           <li key={index}>
             <button

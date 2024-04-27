@@ -1,10 +1,9 @@
-// import React, { useState } from "react";
-import { Component } from 'react';
+import { useState } from 'react';
+// import { Component } from 'react';
 import FeedbackOptions from './FeedbackOptions/FeedbackOptions';
 import Notification from './Notification/Notification';
 import Section from './Section/Section';
 import Statistics from './Statistics/Statistics';
-//   const [state, setState] =// import css from "./App.module.css";
 
 // export const App = () => {
 //  useState({
@@ -13,12 +12,10 @@ import Statistics from './Statistics/Statistics';
 //     bad: 0,
 //   });
 
-class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+const App = () => {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
   //  event.currentTarget в React — це властивість об’єкта події, яка ідентифікує елемент, до якого прикріплений обробник події.
   // Важливо розуміти різницю між event.currentTarget та event.target.
@@ -33,11 +30,6 @@ class App extends Component {
   //  У більшості випадків ви будете використовувати event.target, оскільки він зазвичай вказує на конкретний елемент, який спричинив подію.
   //  Але іноді event.currentTarget може бути корисним, коли ви хочете отримати доступ до елемента, до якого прикріплений обробник,
   // незалежно від того, який елемент спричинив подію.
-
-  // приклад, по якому треба зробити
-  // class Counter extends Component {
-  //   /* ... */
-
   //     handleIncrement = () => {
   //       this.setState((state, props) => ({
   //         value: state.value + props.step,
@@ -49,8 +41,6 @@ class App extends Component {
   //         value: state.value - props.step,
   //       }));
   //     };
-
-  //   /* ... */
   //   }
 
   // додавання відгуку по одному
@@ -62,19 +52,25 @@ class App extends Component {
   // };
 
   // додавання відгуку по одному
-  handleFeedback = evt => {
-    const { name } = evt.target;
-    this.setState(state => ({ [name]: state[name] + 1 }));
-  };
+  // handleFeedback = e => {
+  //   const { name } = e.target;
+  //   this.setState(state => ({ [name]: state[name] + 1 }));
+  // };
 
+  const handleFeedback = e => {
+    const { name } = e.target;
+    name === 'good' && setGood(good + 1);
+    name === 'neutral' && setNeutral(neutral + 1);
+    name === 'bad' && setBad(bad + 1);
+  };
   //  разом всі відгуки
   // const countTotalFeedback = () => {
   //   return feedback.good + feedback.neutral + feedback.bad;
   // };
 
   //  разом всі відгуки
-  countTotalFeedback = () => {
-    const { good, neutral, bad } = this.state;
+  const countTotalFeedback = () => {
+    // const { good, neutral, bad } = feedbackState;
     return good + neutral + bad;
   };
 
@@ -85,41 +81,39 @@ class App extends Component {
   // };
 
   // процентовка всіх хороших відгуків
-  countPositiveFeedbackPercentage = () => {
-    const { good, neutral, bad } = this.state;
+  const countPositiveFeedbackPercentage = () => {
+    // const { good, neutral, bad } = feedbackState;
     return Math.round((good / (good + neutral + bad)) * 100);
   };
 
-  render() {
-    const { good, neutral, bad } = this.state;
-    const actualState = this.state;
-    const total = this.countTotalFeedback();
-    const positivePercentage = this.countPositiveFeedbackPercentage();
-    return (
-      <>
-        <Section title="Please leave feedback">
-          <FeedbackOptions
-            options={actualState}
-            onLeaveFeedback={this.handleFeedback}
-          />
-        </Section>
+  // const { good, neutral, bad } = feedbackState;
+  // const actualState = feedbackState;
+  const total = countTotalFeedback();
+  const positivePercentage = countPositiveFeedbackPercentage();
+  return (
+    <>
+      <Section title="Please leave feedback">
+        <FeedbackOptions
+          options={['good', 'neutral', 'bad']}
+          onLeaveFeedback={handleFeedback}
+        />
+      </Section>
 
-        <Section title="Statistics">
-          {total ? (
-            <Statistics
-              good={good}
-              neutral={neutral}
-              bad={bad}
-              total={total}
-              positivePercentage={positivePercentage}
-            />
-          ) : (
-            <Notification message="No feedback given." />
-          )}
-        </Section>
-      </>
-    );
-  }
-}
+      <Section title="Statistics">
+        {total ? (
+          <Statistics
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            total={total}
+            positivePercentage={positivePercentage}
+          />
+        ) : (
+          <Notification message="No feedback given." />
+        )}
+      </Section>
+    </>
+  );
+};
 
 export default App;
